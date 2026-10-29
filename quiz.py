@@ -1,12 +1,5 @@
 
-
-
-
-
-
-
-
-
+import random, os
 
 
 
@@ -56,7 +49,7 @@ def get_result(percentage):
 
 
 
-# result = get_result(percentage)
+
 
 def quiz_result(score, total_questions, percentage, result):
     print("==== QUIZ RESULT====")
@@ -84,16 +77,15 @@ def play_quiz(questions):
             print("Correct!")
         else:
             print("Wrong!")
+            for answer in question["answers"]:
+                if answer.startswith(question["correct answer"]):
+                    print("Correct answer:", answer)
+                    break
             
     return score
 
 
 
-    # print(question["question"])
-    # for answer in question["answers"]:
-    #     print(answer)
-    # for correct_answer in answer["corrcect anwer"]:
-    #     print(correct_answer)
 
 
 
@@ -109,23 +101,36 @@ def get_total_questions(questions):
             if total > len(questions):
                 print("Too many questions")
 
-            if total >0 and total <= len(questions):
+            elif total >0 and total <= len(questions):
                 return total
-            print("invalid number of questions")
+            else:
+                print("invalid number of questions")
 
         except ValueError:
             print("Invalid input")
 
 
-total_questions = get_total_questions(questions)
-selected_questions = questions[:total_questions]
-final_score = play_quiz(selected_questions)
-percentage = calculate_percentage(final_score, total_questions)
-
-result = get_result(percentage)
 
 
+while True:
+    total_questions = get_total_questions(questions)
+    selected_questions = random.sample(questions, total_questions)
+    final_score = play_quiz(selected_questions)
+    percentage = calculate_percentage(final_score, total_questions)
 
+    result = get_result(percentage)
+    quiz_result(final_score, total_questions, percentage, result)
 
-quiz_result(final_score, total_questions, percentage, result)
-quiz_result(4, 5, 80.0, "Excellent")
+    while True:
+        choice = input("Do you want to play again?   (yes/no)").lower().strip()
+    
+        if choice in ["yes", "no"]:
+            break
+        print("Invalid choice. Try again")
+
+    if choice == "no":
+        break
+    if choice == "yes":
+        os.system("clear")
+        
+  
